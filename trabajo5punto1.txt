@@ -1,0 +1,67 @@
+CREATE TABLE empleado(
+codigoE NUMBER(10) PRIMARY KEY, nombreE VARCHAR2(20) NOT NULL, depE NUMBER(8) NOT NULL --depE NO será clave foránea
+);--La tabla se llenará con filas... CREATE TABLE departamento
+(
+codigoD NUMBER(8) PRIMARY KEY, nombreD VARCHAR2(20) NOT NULL, direccionD VARCHAR2(20) NOT NULL
+);--La tabla se llenará con filas...
+
+-- Se crea el paquete
+CREATE OR REPLACE PACKAGE skipList,IS
+-- Se crea los objetos nodo_skipList y skipListObject , creeria que si pueden ir dentro del p aquete
+ CREATE TYPE nodo_skipList AS OBJECT(
+ Numnodo NUMBER(8),
+ codigoD NUMBER(8),
+ Grupo de punteros,
+ nombreD VARCHAR2(20),
+ direccionD VARCHAR2(20),
+ nodoIzquierdo nodo_skipList, 
+ nodoDerecho nodo_skipList, 
+ nodoSuperior nodo_skipList,
+ nodoInferior nodo_skipList 
+
+ );
+CREATE TYPE skipListObject AS OBJECT(
+ head nodo_skipList ,
+ altura_hh NUMBER(8),
+
+);
+ -- se declara los procedimientos y funciones 
+ PROCEDURE CrearSL(maxPtrs IN NUMBER);
+ FUNCTION ImprimirAscSL() RETURN skipListObject;  
+ FUNCTION ImprimirDescSL() RETURN skipListObject; 
+ PROCEDURE ConsultaDpto(codigoD IN NUMBER);
+END; --Fin de la especificación
+-- se crea el cuerpo del p aquete
+CREATE OR REPLACE PACKAGE BODY mat IS
+-- se hace la implementación del procedimiento CrearSL
+CREATE OR REPLACE PROCEDURE CrearSL
+(maxPtrs IN NUMBER)
+IS
+  k NUMBER(8);
+  maxPtrs_invalido EXCEPTION;
+  BEGIN
+  k= math.log(maxPtrs,2);
+
+  IF maxPtrs < 1 THEN 
+    RAISE maxPtrs_invalido ;
+  ELSIF maxPtrs > 16 THEN 
+    RAISE maxPtrs_invalido ;
+  ELSIF 2^k != 2^log2(2^k) THEN
+    RAISE maxPtrs_invalido ;
+  ELSE
+
+  END IF;
+ 
+  EXCEPTION
+
+  WHEN maxPtrs THEN
+  DBMS_OUTPUT.PUT_LINE('El valor del parámetro maxPtrs de entrada debe ser mayor a 1 y menor a 16, además debe ser una potenica  de 2');
+  WHEN OTHERS THEN
+  DBMS_OUTPUT.PUT_LINE('Ha ocurrido un error');
+
+END;
+
+END; --Fin del cuerpo del paquete
+/
+
+
